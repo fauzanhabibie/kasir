@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kasir</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .product-card {
+            margin-bottom: 20px;
+        }
+
+        .cart-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cart-btn:hover {
+            background-color: #218838;
+        }
+
+        .cart-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cart-items {
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .cart-items table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-items td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .cart-items img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            cursor: pointer;
+            color: #dc3545;
+        }
+
+        .remove-btn:hover {
+            text-decoration: underline;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .checkout-form {
+            margin-top: 20px;
+        }
+
+        .checkout-form input {
+            margin-bottom: 10px;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Sistem Kasir</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <!-- Daftar Menu (col-8) -->
+                <div class="col-md-8">
+                    <h2>Daftar Menu</h2>
+                    <div class="row">
+                        <!-- Product 1 -->
+                        <div class="col-md-3">
+                            <div class="card product-card">
+                                <img src="https://via.placeholder.com/100" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produk 1</h5>
+                                    <p class="card-text">Harga: Rp 10.000</p>
+                                    <button class="btn cart-btn" onclick="addToCart('Produk 1', 10000, 'https://via.placeholder.com/50')">add to cart</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 2 -->
+                        <div class="col-md-3">
+                            <div class="card product-card">
+                                <img src="https://via.placeholder.com/100" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produk 2</h5>
+                                    <p class="card-text">Harga: Rp 15.000</p>
+                                    <button class="btn cart-btn" onclick="addToCart('Produk 2', 15000, 'https://via.placeholder.com/50')">add to cart</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 3 -->
+                        <div class="col-md-3">
+                            <div class="card product-card">
+                                <img src="https://via.placeholder.com/100" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produk 3</h5>
+                                    <p class="card-text">Harga: Rp 20.000</p>
+                                    <button class="btn cart-btn" onclick="addToCart('Produk 3', 20000, 'https://via.placeholder.com/50')">add to cart</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 4 -->
+                        <div class="col-md-3">
+                            <div class="card product-card">
+                                <img src="https://via.placeholder.com/100" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produk 4</h5>
+                                    <p class="card-text">Harga: Rp 25.000</p>
+                                    <button class="btn cart-btn" onclick="addToCart('Produk 4', 25000, 'https://via.placeholder.com/50')">add to cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keranjang dan Total Harga (col-4) -->
+                <div class="col-md-4">
+                    <h2>Keranjang</h2>
+                    <div class="cart-container">
+                        <div class="cart-items" id="cart-items">
+                            <!-- Item dalam keranjang akan muncul di sini -->
+                        </div>
+                        <div class="cart-total">
+                            Total: Rp <span id="total-harga">0</span>
+                        </div>
+
+                        <!-- Form Checkout -->
+                        <div class="checkout-form">
+                            <h3>Checkout</h3>
+                            <form id="checkout-form">
+                                <input type="text" id="nama" class="form-control" placeholder="Nama" required>
+                                <input type="text" id="no-meja" class="form-control" placeholder="No Meja" required>
+                                <select id="metode-pembayaran" class="form-control" required>
+                                    <option value="cash">Cash</option>
+                                    <!-- Option lain jika diperlukan -->
+                                </select>
+                                <button type="button" class="btn btn-primary w-100 mt-3" onclick="checkout()">Checkout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">Struk Pembelian</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Konten struk akan muncul di sini -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="printReceipt()">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript untuk menambah item ke keranjang dan checkout -->
+    <script>
+        let cart = {};
+
+        function addToCart(namaProduk, hargaProduk, gambarProduk) {
+            if (!cart[namaProduk]) {
+                cart[namaProduk] = { harga: hargaProduk, jumlah: 0, gambar: gambarProduk };
+            }
+            cart[namaProduk].jumlah++;
+            updateCart();
+        }
+
+        function removeFromCart(namaProduk) {
+            delete cart[namaProduk];
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+
+            let totalHarga = 0;
+
+            const table = document.createElement('table');
+            table.classList.add('table');
+            table.innerHTML = `
+                <thead>
+                    <tr class="header">
+                        <td>Gambar</td>
+                        <td>Item</td>
+                        <td>Jumlah</td>
+                        <td>Total</td>
+                        <td>Batal</td>
+                    </tr>
+                </thead>
+                <tbody id="cart-items-body">
+                </tbody>
+            `;
+            cartItems.appendChild(table);
+
+            const cartItemsBody = document.getElementById('cart-items-body');
+
+            for (const namaProduk in cart) {
+                const item = cart[namaProduk];
+                const totalItemHarga = item.harga * item.jumlah;
+                totalHarga += totalItemHarga;
+
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><img src="${item.gambar}" alt="${namaProduk}"></td>
+                    <td>${namaProduk}</td>
+                    <td>${item.jumlah} x Rp ${item.harga.toLocaleString()}</td>
+                    <td>Rp ${totalItemHarga.toLocaleString()}</td>
+                    <td><span class="remove-btn" onclick="removeFromCart('${namaProduk}')">&times;</span></td>
+                `;
+                cartItemsBody.appendChild(newRow);
+            }
+
+            document.getElementById('total-harga').textContent = totalHarga.toLocaleString();
+        }
+
+        function checkout() {
+    const nama = document.getElementById('nama').value;
+    const noMeja = document.getElementById('no-meja').value;
+    const metodePembayaran = document.getElementById('metode-pembayaran').value;
+
+    if (!nama || !noMeja || !metodePembayaran) {
+        alert('Mohon lengkapi semua data!');
+        return;
+    }
+
+    // Buat struk
+    let struk = '<h2 style="text-align:center; margin: 0;">KASIR Toko</h2>';
+    struk += '<p style="text-align:center; margin: 0;">Alamat: Jl. Contoh No. 123</p>';
+    struk += '<p style="text-align:center; margin: 0;">Telp: 08123456789</p>';
+    struk += '<hr>';
+    
+    struk += '<p>Nama: ' + nama + '</p>';
+    struk += '<p>No Meja: ' + noMeja + '</p>';
+    struk += '<p>Metode Pembayaran: ' + metodePembayaran + '</p>';
+    struk += '<hr>';
+    struk += '<table style="width:100%; border-collapse: collapse;">';
+    struk += '<tr><th>Nama Item</th><th>Jumlah</th><th>Total</th></tr>';
+
+    for (const namaProduk in cart) {
+        const item = cart[namaProduk];
+        const totalItemHarga = item.harga * item.jumlah;
+        struk += `
+            <tr>
+                <td>${namaProduk}</td>
+                <td>${item.jumlah} x Rp ${item.harga.toLocaleString()}</td>
+                <td>Rp ${totalItemHarga.toLocaleString()}</td>
+            </tr>
+        `;
+    }
+
+    struk += '</table>';
+    struk += '<hr>';
+    struk += '<p style="text-align: center;"><strong>Total: Rp ' + document.getElementById('total-harga').textContent + '</strong></p>';
+
+    struk += '<p style="text-align: center;">Terima kasih atas kunjungan Anda!</p>';
+
+    // Tampilkan modal dengan struk
+    document.getElementById('modal-body-content').innerHTML = struk;
+    const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+    receiptModal.show();
+
+    // Hapus keranjang setelah checkout
+    cart = {};
+    updateCart();
+
+    // Kosongkan form
+    document.getElementById('checkout-form').reset();
+}
+
+function printReceipt() {
+    const printContent = document.getElementById('modal-body-content').innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=300');
+    printWindow.document.write('<html><head><title>Print Receipt</title>');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 12px; width: 80mm; margin: 0; padding: 0; }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+
+
+        // function checkout() {
+        //     const nama = document.getElementById('nama').value;
+        //     const noMeja = document.getElementById('no-meja').value;
+        //     const metodePembayaran = document.getElementById('metode-pembayaran').value;
+
+        //     if (!nama || !noMeja || !metodePembayaran) {
+        //         alert('Mohon lengkapi semua data!');
+        //         return;
+        //     }
+
+            // Buat struk
+            // let struk = '<html><head><title>Struk Pembelian</title>';
+            // struk += '<style>';
+            // struk += 'body { font-family: Arial, sans-serif; font-size: 12px; width: 80mm; margin: 0; padding: 0; }';
+            // struk += 'table { width: 100%; border-collapse: collapse; }';
+            // struk += 'th, td { padding: 5px; text-align: left; border-bottom: 1px solid #ddd; }';
+            // struk += 'th { font-weight: bold; }';
+            // struk += 'hr { margin: 5px 0; }';
+            // struk += '</style>';
+            // struk += '</head><body>';
+            // struk += '<h2 style="text-align:center; margin: 0;">KASIR Toko</h2>';
+            // struk += '<p style="text-align:center; margin: 0;">Alamat: Jl. Contoh No. 123</p>';
+            // struk += '<p style="text-align:center; margin: 0;">Telp: 08123456789</p>';
+            // struk += '<hr>';
+            // struk += '<p style="margin: 0;">Nama: ' + nama + '</p>';
+            // struk += '<p style="margin: 0;">No Meja: ' + noMeja + '</p>';
+            // struk += '<p style="margin: 0;">Metode Pembayaran: ' + metodePembayaran + '</p>';
+            // struk += '<hr>';
+            // struk += '<table>';
+            // struk += '<tr><th>Nama Item</th><th>Jumlah x Harga</th><th>Total</th></tr>';
+
+            // for (const namaProduk in cart) {
+            //     const item = cart[namaProduk];
+            //     const totalItemHarga = item.harga * item.jumlah;
+            //     struk += `
+            //         <tr>
+            //             <td>${namaProduk}</td>
+            //             <td>${item.jumlah} x Rp ${item.harga.toLocaleString()}</td>
+            //             <td>Rp ${totalItemHarga.toLocaleString()}</td>
+            //         </tr>
+            //     `;
+            // }
+
+            // struk += '</table>';
+            // struk += '<hr>';
+            // struk += '<p style="text-align:center; font-weight:bold; margin: 0;">Total: Rp ' + document.getElementById('total-harga').textContent + '</p>';
+            // struk += '<p style="text-align:center; margin: 0;">Terima kasih atas kunjungan Anda!</p>';
+            // struk += '</body></html>';
+
+            // Buat jendela baru dan cetak
+            // const printWindow = window.open('', '', 'height=600,width=300');
+            // printWindow.document.write(struk);
+            // printWindow.document.close();
+            // printWindow.focus();
+            // printWindow.print();
+
+            //struk alert
+
+            // let struk = 'STRUK PEMBELIAN\n';
+            // struk += 'Nama: ' + nama + '\n';
+            // struk += 'No Meja: ' + noMeja + '\n';
+            // struk += 'Metode Pembayaran: ' + metodePembayaran + '\n\n';
+
+            // for (const namaProduk in cart) {
+            //     const item = cart[namaProduk];
+            //     struk += `${namaProduk} - ${item.jumlah} x Rp ${item.harga.toLocaleString()} = Rp ${item.harga * item.jumlah.toLocaleString()}\n`;
+            // }
+            // struk += '\nTotal: Rp ' + document.getElementById('total-harga').textContent;
+            // alert(struk);
+
+            //end struk alert
+
+            // Hapus keranjang setelah checkout
+        //     cart = {};
+        //     updateCart();
+
+        //     // Kosongkan form
+        //     document.getElementById('checkout-form').reset();
+        // }
+    </script>
+</body>
+</html>
